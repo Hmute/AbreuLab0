@@ -1,0 +1,243 @@
+/* ===============================
+   Global theme tokens
+   =============================== */
+:root {
+    --btn-w: 10em;
+    /* requested width  */
+    --btn-h: 5em;
+    /* requested height */
+    --gap: 0.6rem;
+
+    --bg: #111418;
+    --fg: #dbe4ff;
+
+    --ctrl-bg: #0b132b;
+    --ctrl-fg: #f0f4ff;
+
+    --border-soft: rgba(255, 255, 255, 0.08);
+
+    /* Status colors */
+    --info-fg: #0b3d91;
+    --info-bg: #eef5ff;
+
+    --ok-fg: #0a7f3f;
+    --ok-bg: #e9f7ef;
+
+    --warn-fg: #b00020;
+    --warn-bg: #ffe8eb;
+}
+
+/* ===============================
+   Resets / base
+   =============================== */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+/* ===============================
+   Controls bar
+   =============================== */
+.controls {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto 8rem auto 1fr;
+    gap: var(--gap);
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background: var(--ctrl-bg);
+    color: var(--ctrl-fg);
+    border-bottom: 1px solid var(--border-soft);
+}
+
+#btnCountLabel {
+    font-weight: 600;
+}
+
+#btnCount {
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #334;
+    background: #172036;
+    color: #e6edff;
+    width: 7rem;
+}
+
+#btnCount:focus-visible,
+#goBtn:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.55);
+    outline-offset: 2px;
+}
+
+#goBtn {
+    justify-self: start;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid #2b3a67;
+    background: #1c2541;
+    color: #e6edff;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    transition: transform 120ms ease;
+}
+
+#goBtn:hover {
+    transform: translateY(-1px);
+}
+
+#goBtn:active {
+    transform: translateY(0);
+}
+
+#goBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===============================
+   Status messages
+   =============================== */
+.status {
+    margin-left: 0.5rem;
+    font-weight: 600;
+    min-height: 1.4em;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.4rem;
+    align-self: center;
+}
+
+.status.info {
+    color: var(--info-fg);
+    background: var(--info-bg);
+    border-left: 4px solid var(--info-fg);
+}
+
+.status.ok {
+    color: var(--ok-fg);
+    background: var(--ok-bg);
+    border-left: 4px solid var(--ok-fg);
+}
+
+.status.warn {
+    color: var(--warn-fg);
+    background: var(--warn-bg);
+    border-left: 6px solid var(--warn-fg);
+    box-shadow: 0 0 0 2px rgba(176, 0, 32, 0.08) inset;
+}
+
+/* ===============================
+   Play area
+   =============================== */
+.play-area {
+    position: relative;
+    min-height: calc(100vh - 64px);
+    padding: 1rem;
+    overflow: hidden;
+    /* faint grid for visual feedback (optional) */
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 0;
+}
+
+/* Initial flow layout (row with wrap) before scrambling */
+.row-layout {
+    display: flex;
+    flex-wrap: wrap;
+    /* wrap to next line if window is narrow */
+    gap: var(--gap);
+    align-items: flex-start;
+}
+
+/* While scrambling we switch to absolute positioning */
+.absolute-layout {
+    position: relative;
+}
+
+/* ===============================
+   Buttons (tiles)
+   =============================== */
+.tile-btn {
+    width: var(--btn-w);
+    height: var(--btn-h);
+    border: none;
+    border-radius: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    cursor: default;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.tile-btn:active {
+    transform: scale(0.98);
+}
+
+.tile-btn.clickable {
+    cursor: pointer;
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.tile-btn.disabled {
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.revealed {
+    outline: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Absolute-positioned variant used during scrambles */
+.tile-abs {
+    position: absolute;
+    transition: left 300ms ease, top 300ms ease;
+}
+
+/* ===============================
+   Reduced motion support
+   =============================== */
+@media (prefers-reduced-motion: reduce) {
+    .tile-abs {
+        transition: none;
+    }
+
+    .tile-btn {
+        transition: none;
+    }
+
+    #goBtn {
+        transition: none;
+    }
+}
+
+/* ===============================
+   Small screens tweaks
+   =============================== */
+@media (max-width: 420px) {
+    :root {
+        --btn-w: 9em;
+        --btn-h: 4.2em;
+    }
+
+    .controls {
+        grid-template-columns: 1fr 6rem auto;
+        gap: 0.5rem;
+    }
+
+    #btnCountLabel {
+        grid-column: 1 / -1;
+    }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab0 - Memory Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="controls" role="region" aria-label="Controls">
+        <label for="btnCount" id="btnCountLabel" class="lbl"></label>
+        <input id="btnCount" type="number" min="3" max="7" inputmode="numeric"/>
+        <button id="goBtn" type="button"></button>
+        <span id= "status" class="status" aria-live="polite"></span>
+    </header>
+
+    <!-- Play Area, its stylized and measured in JS before each scramble -->
+    <main id="playArea" class="play-area" role="main" aria-label="Play Area"></main>
+
+    <!-- Location of Messages Constants, and game script-->
+    <script src="lang/messages/en/user.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
