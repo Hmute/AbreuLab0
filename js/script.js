@@ -116,10 +116,15 @@ class MemoryGame {
         this._timeouts = [];
         this._interval = null;
 
+        // ---- tweakable knobs for scramble placement ----
+        this._MIN_ANCHOR_DISTANCE_PX = 40; // try to keep anchors at least this far apart
+        this._MAX_TRIES_PER_TILE = 12;     // stop trying after this many attempts (overlap allowed)
+
         this._wireUI();
         this._primeUITexts();
     }
 
+    /* ---------- UI wiring ---------- */
     _wireUI() {
         this.goBtn.addEventListener("click", () => this.start());
         this.inputEl.addEventListener("keydown", (e) => {
@@ -133,6 +138,7 @@ class MemoryGame {
         this.msg.info(window.MESSAGES.STATUS_READY);
     }
 
+    /* ---------- helpers ---------- */
     _validateN(raw) {
         if (!/^\d+$/.test(raw)) { this.msg.warn(window.MESSAGES.ERR_INT); return null; }
         const n = Number(raw);
@@ -153,6 +159,14 @@ class MemoryGame {
         this.expectedIndex = 0;
     }
 
+    /** Euclidean check for anchor proximity (top-left points) */
+    _tooClose(a, b) {
+        const dx = a.left - b.left;
+        const dy = a.top - b.top;
+        return Math.hypot(dx, dy) < this._MIN_ANCHOR_DISTANCE_PX;
+    }
+
+    /* ---------- game flow ---------- */
     start() {
         const n = this._validateN(this.inputEl.value.trim());
         if (n === null) return;
@@ -187,7 +201,7 @@ class MemoryGame {
     }
 
     _beginScrambles(times) {
-        // Switch to absolute layout and pin current positions (avoid an initial jump)
+        // Switch to absolute layout and pin current positions (avoid initial jump)
         this.layout.setAbsoluteLayout();
 
         const parentRect = this.playArea.getBoundingClientRect();
@@ -203,10 +217,19 @@ class MemoryGame {
             count += 1;
             this.msg.info(window.MESSAGES.STATUS_SCRAMBLING(count, times));
 
+            // Try to avoid placing anchors too close; overlap still allowed if we run out of tries
+            const placed = [];
             for (const tile of this.tiles) {
-                const size = tile.getSizePx();                        // read current button size
-                const { left, top } = this.layout.randomPositionFor(size); // read current play-area size
-                tile.setAbsolutePosition(left, top);                  // ensures fully inside bounds
+                const size = tile.getSizePx(); // read current button size
+                let pos, tries = 0;
+
+                do {
+                    pos = this.layout.randomPositionFor(size); // reads current play-area size
+                    tries += 1;
+                } while (placed.some(p => this._tooClose(pos, p)) && tries < this._MAX_TRIES_PER_TILE);
+
+                placed.push(pos);
+                tile.setAbsolutePosition(pos.left, pos.top); // ensures fully inside bounds
             }
 
             if (count >= times) {
@@ -259,6 +282,7 @@ class MemoryGame {
         return `hsl(${h} ${s}% ${l}%)`;
     }
 }
+
 
 /* ===================== Boot ===================== */
 window.addEventListener("DOMContentLoaded", () => {
