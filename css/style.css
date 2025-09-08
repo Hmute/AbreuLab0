@@ -142,7 +142,6 @@ body {
     min-height: calc(100vh - 64px);
     padding: 1rem;
     overflow: hidden;
-    /* faint grid for visual feedback (optional) */
     background-image:
         linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
@@ -154,7 +153,6 @@ body {
 .row-layout {
     display: flex;
     flex-wrap: wrap;
-    /* wrap to next line if window is narrow */
     gap: var(--gap);
     align-items: flex-start;
 }
@@ -210,14 +208,9 @@ body {
    Reduced motion support
    =============================== */
 @media (prefers-reduced-motion: reduce) {
-    .tile-abs {
-        transition: none;
-    }
 
-    .tile-btn {
-        transition: none;
-    }
-
+    .tile-abs,
+    .tile-btn,
     #goBtn {
         transition: none;
     }

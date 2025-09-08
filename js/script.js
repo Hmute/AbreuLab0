@@ -204,9 +204,9 @@ class MemoryGame {
             this.msg.info(window.MESSAGES.STATUS_SCRAMBLING(count, times));
 
             for (const tile of this.tiles) {
-                const size = tile.getSizePx(); // read current button size
+                const size = tile.getSizePx();                        // read current button size
                 const { left, top } = this.layout.randomPositionFor(size); // read current play-area size
-                tile.setAbsolutePosition(left, top); // ensures fully inside bounds
+                tile.setAbsolutePosition(left, top);                  // ensures fully inside bounds
             }
 
             if (count >= times) {
