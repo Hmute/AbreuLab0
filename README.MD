@@ -12,7 +12,7 @@ An interactive memory game that:
 
 ## Folder Structure (required layout)
 
-project-root/
+COMP4537/labs/0/
 ├─ index.html
 ├─ css/
 │ └─ style.css
